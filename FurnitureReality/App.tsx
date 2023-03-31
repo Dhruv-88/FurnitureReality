@@ -16,174 +16,248 @@ import {
   useColorScheme,
   View,
   Image,
+  TextInput,
   TouchableOpacity
 } from 'react-native';
-import {
-  ViroARScene,
-  ViroText,
-  ViroConstants,
-  ViroARSceneNavigator,
-  ViroBox,
-  ViroMaterials,
-  Viro3DObject,
-  ViroAmbientLight,
-  ViroSpinner
-} from '@viro-community/react-viro';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
+import Splash from './screens/splash.js'
+import HomeStack from './screens/homeScreen.js'
+import CategoryScreen from './screens/categoriesScreen.js'
+import IndevidualCategory from './screens/indevidualCategoryScreen.js';
+import IndevidualProductScreen from './screens/indevidualProductScreen.js';
+import CartIntro from './screens/cartScreen.js'
+import ProfileScreen from './screens/profileScreen.js'
+import Login from './screens/login.js'
+import Signup from './screens/signup.js'
 
-const InitialScene =(props)=>{
-  const [rotation,setRotation]=useState([0,100,0])
-  const [position,setPosition]=useState([0,0,-100])
-  const [scale,setScale]=useState([1,1,1])
+const App = () => {
  
-  const [isLoading,setLoadig]=useState(false)
-  ViroMaterials.createMaterials({
-    wood:{
-      // diffuseTexture:{uri:'https://firebasestorage.googleapis.com/v0/b/furniturereality-8f496.appspot.com/o/productImages%2F7wMAq0mUloROKkAxYCw0%2FcolorOptions%2Fwooden.jpeg?alt=media&token=7a07ab84-3410-4195-9cbc-006a05029f4d'}
-      diffuseTexture:require('./assets/wood.jpeg'),
 
+    const Stack = createNativeStackNavigator();
+		const Tab = createBottomTabNavigator();
 
-    },
-    pink:{
-      diffuseTexture:{uri:'https://firebasestorage.googleapis.com/v0/b/furniturereality-8f496.appspot.com/o/productImages%2F7wMAq0mUloROKkAxYCw0%2Fm1.jpg?alt=media&token=977c0105-5d7f-4da0-adc6-e38c0e7c7f92'}
-    }
-    
-  })
+    function GetTab() {
+			return tabClientNavigator;
+		}
 
-  const moveObject=(newPosition)=>{
-    //console.log(newPosition);
-    setPosition(newPosition)
- }
-
- const rotateObject=(rotateState, rotationFactor, source)=>{
-  if(rotateState===3){
-    let currentLocation=[rotation[0]-rotationFactor,rotation[1]-rotationFactor,rotation[2]-rotationFactor];
-    setRotation(currentLocation)
-    console.log("rotation",currentLocation);
-  }
-}
-
-const scaleObject=(pinchState, scaleFactor, source)=>{
-  if(pinchState===3){
-   let currentScale=scale[0];
-   let newScale=currentScale*scaleFactor;
-   let newScaleArray=[newScale,newScale,newScale]
-    
-   console.log(newScaleArray);
-   setScale(newScaleArray)
-  }
- 
-}
-
-    const handleLoadStart = () => {
-      console.log("OBJ loading has started");   
-      setLoadig(true)
-    }  
-    const handleLoadEnd = () => {
-      console.log("OBJ loading has finished");
-      setLoadig(false)
-    }
-// const handleError(event) {
-//   console.log("OBJ loading failed with error: " + event.nativeEvent.error);  
-// }
-
-
-
-  return (
-    <ViroARScene>
-      
-        <ViroSpinner
-        type='dark'
-        position={[0, 0, -2]}
-        visible={isLoading}
+   function CategoriesStack(){
+    return (
+      <Stack.Navigator
+					initialRouteName="CategoryIntro"
+         
+				>
         
-    />
-      
-         < Viro3DObject
-            source={{uri:'https://firebasestorage.googleapis.com/v0/b/furniturereality-8f496.appspot.com/o/productImages%2F7wMAq0mUloROKkAxYCw0%2Fsofa.obj?alt=media&token=45f2eca9-12df-46b1-a890-686ec1520fd8'}}
-            position={position}
-            rotation={rotation}
-            scale={scale}
-
-            onDrag={moveObject}
-            onPinch={scaleObject}
-            //onRotate={rotateObject}
+        <Stack.Screen
+						name="CategoryIntro"
+						component={CategoryScreen}
+						options={{ headerShown: false }}
            
-            materials={['wood']}
-            type="OBJ"
-              onLoadStart={handleLoadStart}
-              onLoadEnd={handleLoadEnd}
-              //onError={this._onError}
-            onError={()=>{console.log('Error while loding model')}}
-        />
-      
+					/>
 
-      
-     
+        <Stack.Screen
+						name="IndevidualCategory"
+						component={IndevidualCategory}
+						options={{ headerShown: false }}
+           
+					/>  
 
-      
-    </ViroARScene>
+        <Stack.Screen
+						name="IndevidualProductScreen"
+						component={IndevidualProductScreen}
+						options={{ headerShown: false }}
+           
+					/>    
 
-    
-   
-    
-  )
-}
 
-function App(): JSX.Element {
-  
 
-  return (
- 
-      
+      </Stack.Navigator>    
+    )
+   }
+
+  function CartStack(){
+    return (
+      <Stack.Navigator
+					initialRouteName="CartIntro"
+				>
+        
+        <Stack.Screen
+						name="CartIntro"
+						component={CartIntro}
+						options={{ headerShown: false, title: 'Search' }}
+					/>
+
+      </Stack.Navigator>    
+    )
+  }
+
+
+  function ProfileStack(){
+    return (
+      <Stack.Navigator
+					initialRouteName="Profile"
+				>
+        
+        <Stack.Screen
+						name="Profile"
+						component={ProfileScreen}
+						options={{ headerShown: false,}}
+					/>
+
+        
+
+
+
+      </Stack.Navigator>    
+    )
+  }
+  let tabClientNavigator=(
+    <Tab.Navigator
+				initialRouteName="HomeStack"
+        screenOptions={{
+          headerShown: false
+        }}
+				tabBarOptions={{
+					showLabel: false,
+
+					style: {
+						height: 80,
+						display: 'flex',
+						backgroundColor: ' #E61F65',
+						padding: 20,
+						paddingBottom: 5,
+						marginBottom: 10,
+					},
           
-            <ViroARSceneNavigator
-              initialScene={{
-                scene:InitialScene
+				}}
+			>
+    
+        <Tab.Screen
+					name="HomeStack"
+					component={HomeStack}
+					options={{
+            showLabel: false,
+						tabBarIcon: ({ focused, color, size }) =>
+							focused ? (
+								<View>
+								 <Image 
+                    source={require('./assets/AcHome.png')}/>
+									
+								</View>
+							) : (
+								<View >
+								   <Image 
+                    source={require('./assets/Home.png')}/>
+                 
+                </View>
+							),
+					}}
+					tabBarOptions={{ style: {} }}
+				/>
+    
+
+    <Tab.Screen
+					name="CategoriesStack"
+					component={CategoriesStack}
+          options={{
+						tabBarIcon: ({ focused, color, size }) =>
+							focused ? (
+								<View>
+								 <Image 
+                    source={require('./assets/Accategories.png')}/>
+									
+								</View>
+							) : (
+								<View >
+								   <Image 
+                    source={require('./assets/categories.png')}/>
+                 
+                </View>
+							),
+					}}
+				/>
+
+    <Tab.Screen
+              name="CartStack"
+              component={CartStack}
+              options={{
+                tabBarIcon: ({ focused, color, size }) =>
+                  focused ? (
+                    <View>
+                     <Image 
+                        source={require('./assets/Accart.png')}/>
+                      
+                    </View>
+                  ) : (
+                    <View >
+                       <Image 
+                        source={require('./assets/cart.png')}/>
+                     
+                    </View>
+                  ),
               }}
             />
-         
 
-         
-        
+    <Tab.Screen
+              name="ProfileStack"
+              component={ProfileStack}
+              options={{
+                tabBarIcon: ({ focused, color, size }) =>
+                  focused ? (
+                    <View>
+                     <Image 
+                        source={require('./assets/AcProfile.png')}/>
+                      
+                    </View>
+                  ) : (
+                    <View >
+                       <Image 
+                        source={require('./assets/Profile.png')}/>
+                     
+                    </View>
+                  ),
+              }}
+            />
+
+
+
+    </Tab.Navigator>    
+  )
+  return (
+     <NavigationContainer>
+       <Stack.Navigator initialRouteName="Splash" options={{ headerShown: false }}>
+       	<Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+        <Stack.Screen name="login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="signup" component={Signup} options={{ headerShown: false }} />
+        <Stack.Screen name="tabClientNavigator" component={GetTab} options={{ headerShown: false }} />
+		 	</Stack.Navigator>
+     </NavigationContainer>  
+
    
   );
-}
+};
+
+// 		<Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+    //     <Stack.Screen name="login" component={Login} options={{ headerShown: false }} />
+    //     <Stack.Screen name="signup" component={Signup} options={{ headerShown: false }} />
+    //     <Stack.Screen name="tabClientNavigator" component={GetTab} options={{ headerShown: false }} />
+  
 
 const styles = StyleSheet.create({
-  rotateButton:{
-    marginTop:'5%',
-    height:'50%',
-    width:'30%',
-    borderRadius:10,
-    justifyContent:'center',
-    backgroundColor:'purple'
+  container:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding:'5%',
+    backgroundColor:'#E9EAFA'
   }
+  
+ 
 });
 
 export default App;
 
-
-
-
-{/* <View style={{backgroundColor:'grey',flex:0.1,flexDirection:'row',justifyContent:'space-evenly'}}>
-<TouchableOpacity
- style={styles.rotateButton}
- onPress={()=>{
-  // setRotation([0,0,rotation[3]+5])
- }}
->
-  <Text style={{color:'white',alignSelf:'center'}}>
-      Rotate Left
-  </Text>
-</TouchableOpacity>
-
-<TouchableOpacity
- style={styles.rotateButton}
->
-  <Text style={{color:'white',alignSelf:'center'}}>
-      Rotate Right
-  </Text>
-</TouchableOpacity>
-</View> */}
