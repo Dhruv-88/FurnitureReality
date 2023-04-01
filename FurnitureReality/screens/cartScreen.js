@@ -17,7 +17,7 @@ import {
 import { getFirestore } from "firebase/firestore";
 import {app} from '../firebase/firebase';
 import { getAuth } from "firebase/auth";
-import {  doc,getDoc,collection ,query, where,getDocs,onSnapshot} from "firebase/firestore"; 
+import {  doc,getDoc,collection ,query, where,getDocs,onSnapshot,updateDoc} from "firebase/firestore"; 
 import { useIsFocused } from '@react-navigation/native';
 
 
@@ -57,13 +57,7 @@ useEffect(()=>{
           
           const q = query(collection(db, "Products"), where("productId", "==",docSnap.data().cart[i]));
 
-          // const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            
-          //   querySnapshot.forEach((doc) => {
-          //     prodctArr.push(doc.data());
-          //   });
-          //   //console.log("products ==>",prodctArr);
-          // });
+        
 
 
           const querySnapshot = await getDocs(q);
@@ -107,16 +101,23 @@ useEffect(()=>{
             </View>
 
             <View>
-                  <Text style={{fontSize:12}}>
+                  <Text style={{fontSize:15}}>
                   Product Dimensions :
                 </Text>
-                <Text style={{fontWeight:500,marginTop:10,color:'#787575'}}> Height : {item.productHeight}</Text>
-                <Text style={{fontWeight:500,color:'#787575'}}> Width : {item.productWidth}</Text>
+                <Text style={{fontWeight:500,marginTop:'15%',color:'#787575',fontSize:15}}> Height : {item.productHeight}</Text>
+                <Text style={{fontWeight:500,color:'#787575',fontSize:15}}> Width : {item.productWidth}</Text>
             
               <TouchableOpacity
-              
+               style={styles.deletButton}
+               onPress={
+                ()=>{
+                  removeItemFromCart(item.productId)
+                }
+               }
               >
-                <Text>Remove</Text>
+                <Text
+                 style={{fontSize:15,alignSelf:'center',color:'white'}}
+                >Remove</Text>
               </TouchableOpacity>
         
             </View>
@@ -125,7 +126,25 @@ useEffect(()=>{
        )
     }
 
+    async function removeItemFromCart(itemid){
+      
+      //console.log("items beforeFilter==>",items);
+      const filteredArray=items.filter(function(item){
+        return item != itemid
+   })
+      //console.log("items after removing",filteredArray);
+      
+      const cartRef = doc(db, "Users", uid);
 
+      await updateDoc(cartRef, {
+        cart: filteredArray
+      });
+
+
+      getCartItems()
+    
+
+    }
 
   return (
    
@@ -137,12 +156,44 @@ useEffect(()=>{
      </View>  
 
      <View style={{height:'90%',width:'100%',display:'flex',flexDirection:'row'}}>
-      <FlatList
+      {
+        products.length ==0?
+         <View style={styles.emptyCartContainer}>
+         <Image
+          source={require('../assets/emptyCart.png')}
+          style={styles.emptyCartImage}
+         /> 
+
+         <View >
+          <Text style={styles.emptyCartText}>
+            Your Cart is Empty !! 
+          </Text>
+
+          <TouchableOpacity
+           style={styles.continueShoppingButton}
+           onPress={
+            ()=>{
+              navigation.navigate('CategoriesStack',{screen:'CategoryIntro'})
+            }
+           }
+          >
+           <Text
+             style={{color:'white',fontSize:10,alignSelf:'center'}}
+            >
+            Continue Shopping
+           </Text>
+          </TouchableOpacity>
+         </View>
+        </View>
+        :
+        <FlatList
             data={products}
             renderItem={({item}) => renderProduct(item,navigation)}
             keyExtractor={item => item.productId}
             style={{height:'100%'}}
           />
+      }
+      
      </View>
 
      
@@ -179,8 +230,39 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:'row'
     
+  },
+  emptyCartContainer:{
+    flex:1,
+    justifyContent:'center'
   }
-  
+  ,
+  emptyCartImage:{
+    alignSelf:'center'
+  },
+  emptyCartText:{
+    fontSize:20,
+    color:'#787575',
+    alignSelf:'center',
+    marginTop:'20%'
+  },
+  continueShoppingButton:{
+    height:'12%',
+    width:'30%',
+    backgroundColor:'#9E0C90',
+    borderRadius:10,
+    alignSelf:'center',
+    marginTop:'5%',
+    justifyContent:'center'
+  },
+  deletButton:{
+    backgroundColor:'#9E0C90',
+    height:'20%',
+    width:'70%',
+    justifyContent:'center',
+    borderRadius:4,
+    marginTop:'20%',
+    alignSelf:'center'
+   }
  
 });
 
