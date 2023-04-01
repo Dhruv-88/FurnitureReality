@@ -1,5 +1,5 @@
 
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -27,21 +27,29 @@ import {
 
 
 const InitialScene =(props)=>{
+  
+  useEffect(()=>{
+
+    console.log("from ar",props.props);
+  
+    },[])
+  
+    
   const [rotation,setRotation]=useState([0,100,0])
   const [position,setPosition]=useState([0,0,-100])
   const [scale,setScale]=useState([1,1,1])
+
+  
  
   const [isLoading,setLoadig]=useState(false)
   ViroMaterials.createMaterials({
-    wood:{
+    material:{
       // diffuseTexture:{uri:'https://firebasestorage.googleapis.com/v0/b/furniturereality-8f496.appspot.com/o/productImages%2F7wMAq0mUloROKkAxYCw0%2FcolorOptions%2Fwooden.jpeg?alt=media&token=7a07ab84-3410-4195-9cbc-006a05029f4d'}
-      diffuseTexture:require('./assets/wood.jpeg'),
+      diffuseTexture:{uri:props.props.ARMaterials}
 
 
-    },
-    pink:{
-      diffuseTexture:{uri:'https://firebasestorage.googleapis.com/v0/b/furniturereality-8f496.appspot.com/o/productImages%2F7wMAq0mUloROKkAxYCw0%2Fm1.jpg?alt=media&token=977c0105-5d7f-4da0-adc6-e38c0e7c7f92'}
     }
+    
     
   })
 
@@ -95,7 +103,7 @@ const scaleObject=(pinchState, scaleFactor, source)=>{
     />
       
          < Viro3DObject
-            source={{uri:'https://firebasestorage.googleapis.com/v0/b/furniturereality-8f496.appspot.com/o/productImages%2F7wMAq0mUloROKkAxYCw0%2Fsofa.obj?alt=media&token=45f2eca9-12df-46b1-a890-686ec1520fd8'}}
+            source={{uri:props.props.ARImage}}
             position={position}
             rotation={rotation}
             scale={scale}
@@ -104,11 +112,13 @@ const scaleObject=(pinchState, scaleFactor, source)=>{
             onPinch={scaleObject}
             //onRotate={rotateObject}
            
-            materials={['wood']}
+            materials={["material"]}
             type="OBJ"
               onLoadStart={handleLoadStart}
               onLoadEnd={handleLoadEnd}
-              //onError={this._onError}
+              onError={()=>{
+                console.log("erroe----------");
+              }}
             onError={()=>{console.log('Error while loding model')}}
         />
       
@@ -125,8 +135,11 @@ const scaleObject=(pinchState, scaleFactor, source)=>{
   )
 }
 
-function ARscreen(): JSX.Element {
-  
+// function ARscreen(): JSX.Element {
+const ARscreen = ({navigation,route}) => {
+  useEffect(()=>{
+    console.log(route.params);
+   })
 
   return (
  
@@ -134,8 +147,11 @@ function ARscreen(): JSX.Element {
           
             <ViroARSceneNavigator
               initialScene={{
-                scene:InitialScene
+                scene:InitialScene,
+                passProps: { props:route.params }
+
               }}
+             
             />
          
 

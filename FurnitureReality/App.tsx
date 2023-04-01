@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
 
 import React,{useState} from 'react';
 import type {PropsWithChildren} from 'react';
@@ -34,6 +28,7 @@ import CartIntro from './screens/cartScreen.js'
 import ProfileScreen from './screens/profileScreen.js'
 import Login from './screens/login.js'
 import Signup from './screens/signup.js'
+import ARscreen from './screens/ARscreen.js'
 
 const App = () => {
  
@@ -71,7 +66,14 @@ const App = () => {
 						component={IndevidualProductScreen}
 						options={{ headerShown: false }}
            
-					/>    
+					/> 
+
+         <Stack.Screen
+						name="ARscreen"
+						component={ARscreen}
+						options={{ headerShown: false }}
+           
+					/>      
 
 
 
@@ -155,6 +157,8 @@ const App = () => {
                  
                 </View>
 							),
+              gestureEnabled: false
+
 					}}
 					tabBarOptions={{ style: {} }}
 				/>
@@ -229,11 +233,11 @@ const App = () => {
   )
   return (
      <NavigationContainer>
-       <Stack.Navigator initialRouteName="Splash" options={{ headerShown: false }}>
-       	<Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-        <Stack.Screen name="login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="signup" component={Signup} options={{ headerShown: false }} />
-        <Stack.Screen name="tabClientNavigator" component={GetTab} options={{ headerShown: false }} />
+       <Stack.Navigator initialRouteName="Splash" options={{ headerShown: false ,gestureEnabled: false}}>
+       	<Stack.Screen name="Splash" component={Splash} options={{ headerShown: false ,gestureEnabled: false}} />
+        <Stack.Screen name="login" component={Login} options={{ headerShown: false,gestureEnabled: false }} />
+        <Stack.Screen name="signup" component={Signup} options={{ headerShown: false ,gestureEnabled: false}} />
+        <Stack.Screen name="tabClientNavigator" component={GetTab} options={{ headerShown: false ,gestureEnabled: false}} />
 		 	</Stack.Navigator>
      </NavigationContainer>  
 

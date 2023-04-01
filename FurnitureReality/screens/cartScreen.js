@@ -17,7 +17,7 @@ import {
 import { getFirestore } from "firebase/firestore";
 import {app} from '../firebase/firebase';
 import { getAuth } from "firebase/auth";
-import {  doc,getDoc,collection ,query, where,getDocs} from "firebase/firestore"; 
+import {  doc,getDoc,collection ,query, where,getDocs,onSnapshot} from "firebase/firestore"; 
 import { useIsFocused } from '@react-navigation/native';
 
 
@@ -34,24 +34,38 @@ const isFocused = useIsFocused();
 
 
 useEffect(()=>{
- getCartItems()
+  if(isFocused){
+    getCartItems()
+   // console.log('focued')
+  }
+  
 },[isFocused])
 
 
     async function getCartItems(){
         const docRef = doc(db,"Users",uid);
         const docSnap = await getDoc(docRef);
-
+     
         const productRef = collection(db, "products");
         //console.log(docSnap.data().cart);
 
         updateitems(docSnap.data().cart)
       
-        console.log();
+       // console.log("items",);
         var prodctArr=[]
-        for(i=0;i<items.length;i++){
+        for(i=0;i<docSnap.data().cart.length;i++){
           
-          const q = query(collection(db, "Products"), where("productId", "==",items[i]));
+          const q = query(collection(db, "Products"), where("productId", "==",docSnap.data().cart[i]));
+
+          // const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            
+          //   querySnapshot.forEach((doc) => {
+          //     prodctArr.push(doc.data());
+          //   });
+          //   //console.log("products ==>",prodctArr);
+          // });
+
+
           const querySnapshot = await getDocs(q);
           querySnapshot.forEach((doc) => {
             //console.log(doc.id, " => ", doc.data());
@@ -60,7 +74,7 @@ useEffect(()=>{
     
         }
 
-        console.log("-",prodctArr);
+        //console.log("-",prodctArr);
         updateProducts(prodctArr)
         
 

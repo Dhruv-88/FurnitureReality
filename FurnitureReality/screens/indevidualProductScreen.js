@@ -18,7 +18,8 @@ import {app} from '../firebase/firebase';
 import { doc, setDoc ,updateDoc, arrayUnion,} from "firebase/firestore"; 
 const IndevidualProductScreen = ({navigation,route}) => {
 
-  const [uid,setUid]=useState('')
+  const [selectedMaterials,updateSelectedMaterials]=useState(route.params.productColorOptions[0])
+  const [uid,setUid]=useState('');
   const db = getFirestore(app);
   
 
@@ -83,10 +84,16 @@ const IndevidualProductScreen = ({navigation,route}) => {
           {
             route.params.productColorOptions.map((imageUrl)=>{
               return(
-                <TouchableOpacity>
+                <TouchableOpacity 
+                 onPress={
+                  ()=>{
+                    updateSelectedMaterials(imageUrl)
+                  }
+                 }
+                >
 
                   <Image
-                  style={{height:50,width:50,margin:5,borderRadius:4}}
+                  style={imageUrl==selectedMaterials?{height:50,width:50,margin:5,borderRadius:4,borderColor:'#9E0C90',borderWidth:5}:{height:50,width:50,margin:5,borderRadius:4}}
                   source={{uri:imageUrl}}
                   />
 
@@ -117,7 +124,17 @@ const IndevidualProductScreen = ({navigation,route}) => {
         </View>
        </View>
         <View>
-          <TouchableOpacity style={{marginTop:30,width:'100%',height:50,backgroundColor:'#9E0C90',borderRadius:10,justifyContent:'center'}}>
+          <TouchableOpacity 
+            style={styles.virtualTryOnButoon}
+            onPress={
+              ()=>{
+                navigation.navigate('ARscreen',{
+                  ARImage:route.params.productImage,
+                  ARMaterials:selectedMaterials
+                })
+              }
+            }
+            >
             <Text 
             style={{alignSelf:'center',color:'white',fontSize:20}}>Virtual Try On !!</Text>
           </TouchableOpacity>
@@ -177,6 +194,14 @@ const styles = StyleSheet.create({
     width:'100%',
     height:50,
     backgroundColor:'#787575',
+    borderRadius:10,
+    justifyContent:'center'
+  },
+  virtualTryOnButoon:{
+    marginTop:30,
+    width:'100%',
+    height:50,
+    backgroundColor:'#9E0C90',
     borderRadius:10,
     justifyContent:'center'
   }

@@ -17,7 +17,9 @@ import {
   View,
   Image,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -65,7 +67,8 @@ const Login = ({navigation}) => {
   }
  } 
   return (
-    <View
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
 
       <View >
@@ -155,7 +158,7 @@ const Login = ({navigation}) => {
       </View>
 
 
-    </View>
+    </KeyboardAvoidingView>
   );
 };
   
@@ -203,7 +206,7 @@ const styles = StyleSheet.create({
     color:'#787575'
   },
   input:{
-     height:30,
+     height:'70%',
      width:'100%',
      backgroundColor:'white',
      borderRadius:4,
