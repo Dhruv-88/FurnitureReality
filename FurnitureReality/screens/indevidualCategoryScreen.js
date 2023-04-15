@@ -97,15 +97,16 @@ const IndevidualCategory = ({route,navigation}) => {
           </View>     
       </View>  
 
-      <View style={styles.productContainer}>
+      
         <FlatList
           data={products}
           renderItem={({item}) => renderProduct(item,navigation)}
           keyExtractor={item => item.productId}
-          style={{height:'100%'}}
+          style={{height:'100%',width:'100%'}}
+          numColumns={2}
         />
        
-      </View>
+      
   </View>
   );
 };
@@ -116,7 +117,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding:'5%',
-    backgroundColor:'#E9EAFA'
+    backgroundColor:'#E9EAFA',
+    
   },
   headerContainer:{
     width:'100%',
@@ -145,10 +147,15 @@ const styles = StyleSheet.create({
   indevidualProduct:{
     height:200,
     width:'45%',
-    marginLeft:'5%',
+    marginLeft:'2%',
+    marginRight:'5%',
     backgroundColor:'white',
     borderRadius:10,
-    paddingTop:'10%'
+    paddingTop:'10%',
+    marginTop:'10%',
+   
+  
+    
   }
   
  

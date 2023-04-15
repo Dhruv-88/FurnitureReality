@@ -35,9 +35,9 @@ const InitialScene =(props)=>{
     },[])
   
     
-  const [rotation,setRotation]=useState([0,100,0])
+  const [rotation,setRotation]=useState([0,0,0])
   const [position,setPosition]=useState([0,0,-100])
-  const [scale,setScale]=useState([1,1,1])
+  const [scale,setScale]=useState(props.props.scale)
 
   
  
@@ -138,22 +138,55 @@ const scaleObject=(pinchState, scaleFactor, source)=>{
 // function ARscreen(): JSX.Element {
 const ARscreen = ({navigation,route}) => {
   useEffect(()=>{
-    console.log(route.params);
+    //console.log(route.params);
    })
 
   return (
  
       
+          <View style={{flex:1}}>
+
+            <View style={{height:'10%',width:'100%',flexDirection:'row'}}>
+
+            
+            <TouchableOpacity 
+             style={{width:'20%',justifyContent:'center'}}
+             onPress={
+              ()=>{
+                navigation.goBack()
+              }
+             }
+             >
+             <Image
+              source={require('../assets/back.png')}
+              style={{alignSelf:'flex-start',marginTop:'10%',marginLeft:'50%'}}
+             />
+
+             
+            </TouchableOpacity>
+
+            <View style={{justifyContent:'center',width:'60%'}}>
+              <Text style={{alignSelf:'center',fontSize:20,marginTop:'7%',color:'#787575'}}>
+                3D Preview
+              </Text>
+             </View>
+
+
+             </View>
           
+            
             <ViroARSceneNavigator
               initialScene={{
                 scene:InitialScene,
                 passProps: { props:route.params }
 
               }}
+              
              
             />
-         
+          </View>
+          
+            
 
          
         

@@ -29,6 +29,7 @@ import ProfileScreen from './screens/profileScreen.js'
 import Login from './screens/login.js'
 import Signup from './screens/signup.js'
 import ARscreen from './screens/ARscreen.js'
+import passwordReset from './screens/passwordReset'
 
 const App = () => {
  
@@ -109,6 +110,12 @@ const App = () => {
 						component={ProfileScreen}
 						options={{ headerShown: false,}}
 					/>
+
+        <Stack.Screen
+						name="passwordReset"
+						component={passwordReset}
+						options={{ headerShown: false,}}
+					/>  
 
         
 

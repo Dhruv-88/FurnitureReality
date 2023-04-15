@@ -90,6 +90,7 @@ const IndevidualProductScreen = ({navigation,route}) => {
                     updateSelectedMaterials(imageUrl)
                   }
                  }
+                 key={imageUrl}
                 >
 
                   <Image
@@ -112,6 +113,14 @@ const IndevidualProductScreen = ({navigation,route}) => {
          </Text>
        </View>
 
+       <View>
+          
+        
+            <Text style={{color:'#9E0C90',fontWeight:700,marginTop:'10%'}}>
+                    Price : {route.params.productPrice} {`\u20B9`}
+            </Text>
+       </View>
+
        <View style={{marginTop:20}}>
 
         <Text style={{fontSize:20}}>
@@ -130,7 +139,8 @@ const IndevidualProductScreen = ({navigation,route}) => {
               ()=>{
                 navigation.navigate('ARscreen',{
                   ARImage:route.params.productImage,
-                  ARMaterials:selectedMaterials
+                  ARMaterials:selectedMaterials,
+                  scale:route.params.productScale
                 })
               }
             }
